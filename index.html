@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>尚德智慧助老服务平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f8f9fa;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 注册页面 */
+        .register-page {
+            padding: 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #667eea;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .app-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .app-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .register-form {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.9);
+            font-size: 16px;
+            color: #333;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* 主界面 */
+        .main-app {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 九宫格布局 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .grid-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .grid-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 10px;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .grid-title {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* 养老课堂特殊布局 */
+        .video-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-upload {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-upload:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .video-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .video-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .video-thumbnail {
+            width: 60px;
+            height: 45px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .video-info h4 {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .video-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 414px;
+            width: 100%;
+            background: white;
+            display: flex;
+            border-top: 1px solid #eee;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 12px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            background: none;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+            background: linear-gradient(to top, rgba(102, 126, 234, 0.1), transparent);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin: 0 auto 4px;
+            background: #999;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .nav-item.active .nav-icon {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        .nav-title {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .nav-item.active .nav-title {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #333;
+            margin: 20px 0 15px;
+            font-weight: bold;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 375px) {
+            .grid-container {
+                gap: 10px;
+            }
+            
+            .grid-item {
+                padding: 15px 8px;
+            }
+            
+            .grid-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            
+            .grid-title {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 注册页面 -->
+        <div id="registerPage" class="register-page">
+            <div class="logo">尚德</div>
+            <h1 class="app-title">尚德智慧助老服务平台</h1>
+            <p class="app-subtitle">用科技温暖夕阳，让爱心传递温暖</p>
+            
+            <div class="register-form">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" placeholder="请输入您的姓名">
+                </div>
+                <div class="form-group">
+                    <label for="phone">手机号</label>
+                    <input type="tel" id="phone" placeholder="请输入手机号">
+                </div>
+                <div class="form-group">
+                    <label for="age">年龄</label>
+                    <input type="number" id="age" placeholder="请输入年龄">
+                </div>
+                <div class="form-group">
+                    <label for="identity">身份</label>
+                    <select id="identity">
+                        <option value="">请选择身份</option>
+                        <option value="elderly">老年人</option>
+                        <option value="family">家属</option>
+                        <option value="volunteer">志愿者</option>
+                        <option value="caregiver">护理员</option>
+                    </select>
+                </div>
+                <button class="register-btn" onclick="completeRegistration()">完成注册</button>
+            </div>
+        </div>
+
+        <!-- 主应用界面 -->
+        <div id="mainApp" class="main-app">
+            <div class="header">
+                <h1>尚德智慧助老服务平台</h1>
+                <p class="user-info">欢迎您，<span id="welcomeUser">用户</span></p>
+            </div>
+
+            <div class="content">
+                <!-- 团队概况页面 -->
+                <div id="teamPage" class="page active">
+                    <h2 class="section-title">团队概况</h2>
+                    <div class="grid-container">
+                        <div class="grid-item" onclick="showDetail('团队介绍')">
+                            <div class="grid-icon">📋</div>
+                            <div class="grid-title">团队介绍</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('团队成员')">
+                            <div class="grid-icon">👥</div>
+                            <div class="grid-title">团队成员</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('服务定位')">
+                            <div class="grid-icon">🎯</div>
+                            <div class="grid-title">服务定位</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('发展规模')">
+                            <div class="grid-icon">📈</div>
+                            <div class="grid-title">发展规模</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('服务目标')">
+                            <div class="grid-icon">🎪</div>
+                            <div class="grid-title">服务目标</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('联系我们')">
+                            <div class="grid-icon">📞</div>
+                            <div class="grid-title">联系我们</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 养老课堂页面 -->
+                <div id="classPage" class="page">
+                    <h2 class="section-title">养老课堂</h2>
+                    
+                    <div class="video-section">
+                        <div class="video-upload" onclick="uploadVideo()">
+                            <div style="font-size: 40px; color: #ddd; margin-bottom: 10px;">📹</div>
+                            <p style="color: #666;">点击上传视频</p>
+                        </div>
+                        
+                        <h3 style="margin: 20px 0 15px; color: #333;">精选课程</h3>
+                        <div class="video-list">
+                            <div class="video-item" onclick="playVideo('健康养生讲座')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div class="video-info">
+                                    <h4>健康养生讲座</h4>
+                                    <p>时长：45分钟 · 观看：1.2万次</p>
+                                </div>
+                            </div>
+                            <div class="video-item" onclick="playVideo('智能手机使用指南')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div class="video-info">
+                                    <h4>智能手机使用指南</h4>
+                                    <p>时长：30分钟 · 观看：8千次</p>
+                                </div>
+                            </div>
+                            <div class="video-item" onclick="playVideo('老年心理健康')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div class="video-info">
+                                    <h4>老年心理健康</h4>
+                                    <p>时长：35分钟 · 观看：6千次</p>
+                                </div>
+                            </div>
+                            <div class="video-item" onclick="playVideo('防诈骗安全教育')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div class="video-info">
+                                    <h4>防诈骗安全教育</h4>
+                                    <p>时长：25分钟 · 观看：1.5万次</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 服务清单页面 -->
+                <div id="servicePage" class="page">
+                    <h2 class="section-title">服务清单</h2>
+                    <div class="grid-container">
+                        <div class="grid-item" onclick="selectService('智慧生活')">
+                            <div class="grid-icon">🏠</div>
+                            <div class="grid-title">智慧生活</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('生活辅导')">
+                            <div class="grid-icon">📚</div>
+                            <div class="grid-title">生活辅导</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('出行陪伴')">
+                            <div class="grid-icon">🚗</div>
+                            <div class="grid-title">出行陪伴</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('医疗体检')">
+                            <div class="grid-icon">🏥</div>
+                            <div class="grid-title">医疗体检</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('上门服务')">
+                            <div class="grid-icon">🚪</div>
+                            <div class="grid-title">上门服务</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('心理疏导')">
+                            <div class="grid-icon">💝</div>
+                            <div class="grid-title">心理疏导</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('紧急求助')">
+                            <div class="grid-icon">🚨</div>
+                            <div class="grid-title">紧急求助</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('生活用品')">
+                            <div class="grid-icon">🛒</div>
+                            <div class="grid-title">生活用品</div>
+                        </div>
+                        <div class="grid-item" onclick="selectService('法律咨询')">
+                            <div class="grid-icon">⚖️</div>
+                            <div class="grid-title">法律咨询</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 志愿者管理页面 -->
+                <div id="volunteerPage" class="page">
+                    <h2 class="section-title">志愿者管理</h2>
+                    <div class="grid-container">
+                        <div class="grid-item" onclick="manageVolunteer('志愿者招募')">
+                            <div class="grid-icon">📢</div>
+                            <div class="grid-title">志愿者招募</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿者培训')">
+                            <div class="grid-icon">📖</div>
+                            <div class="grid-title">志愿者培训</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿者认证')">
+                            <div class="grid-icon">✅</div>
+                            <div class="grid-title">志愿者认证</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿者实习')">
+                            <div class="grid-icon">👨‍💼</div>
+                            <div class="grid-title">志愿者实习</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿者之星')">
+                            <div class="grid-icon">⭐</div>
+                            <div class="grid-title">志愿者之星</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿活动')">
+                            <div class="grid-icon">🎪</div>
+                            <div class="grid-title">志愿活动</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿服务记录')">
+                            <div class="grid-icon">📋</div>
+                            <div class="grid-title">服务记录</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('志愿者社区')">
+                            <div class="grid-icon">🏘️</div>
+                            <div class="grid-title">志愿者社区</div>
+                        </div>
+                        <div class="grid-item" onclick="manageVolunteer('表彰奖励')">
+                            <div class="grid-icon">🏆</div>
+                            <div class="grid-title">表彰奖励</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部导航栏 -->
+            <div class="bottom-nav">
+                <button class="nav-item active" onclick="switchPage('team', this)">
+                    <div class="nav-icon">🏢</div>
+                    <div class="nav-title">团队概况</div>
+                </button>
+                <button class="nav-item" onclick="switchPage('class', this)">
+                    <div class="nav-icon">📚</div>
+                    <div class="nav-title">养老课堂</div>
+                </button>
+                <button class="nav-item" onclick="switchPage('service', this)">
+                    <div class="nav-icon">🛎️</div>
+                    <div class="nav-title">服务清单</div>
+                </button>
+                <button class="nav-item" onclick="switchPage('volunteer', this)">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-title">志愿者管理</div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 完成注册
+        function completeRegistration() {
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const age = document.getElementById('age').value;
+            const identity = document.getElementById('identity').value;
+
+            if (!name || !phone || !age || !identity) {
+                alert('请完整填写注册信息！');
+                return;
+            }
+
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                alert('请输入正确的手机号！');
+                return;
+            }
+
+            document.getElementById('welcomeUser').textContent = name;
+            document.getElementById('registerPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'flex';
+        }
+
+        // 切换页面
+        function switchPage(pageType, element) {
+            // 移除所有活跃状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // 激活当前选择
+            element.classList.add('active');
+            document.getElementById(pageType + 'Page').classList.add('active');
+        }
+
+        // 显示团队详情
+        function showDetail(title) {
+            const details = {
+                '团队介绍': '尚德智慧助老服务平台致力于为老年人提供全方位、智能化的养老服务，通过科技手段温暖每一个需要关爱的长者。',
+                '团队成员': '我们拥有专业的养老服务团队，包括医护人员、心理咨询师、社工、志愿者等，为老年人提供专业贴心的服务。',
+                '服务定位': '专注于智慧养老服务，结合互联网技术为老年人提供便民、贴心、专业的居家和社区养老服务。',
+                '发展规模': '目前已服务10000+老年人家庭，拥有500+专业服务人员，覆盖50+社区服务点。',
+                '服务目标': '让每一位老年人都能享受到有尊严、有品质的晚年生活，实现老有所养、老有所乐、老有所为。',
+                '联系我们': '服务热线：400-123-4567\n地址：上海市浦东新区张江高科技园区\n邮箱：service@shangde.com'
+            };
+            
+            alert(details[title] || '功能开发中...');
+        }
+
+        // 播放视频
+        function playVideo(title) {
+            alert(`正在播放：${title}\n\n这里将打开视频播放界面，用户可以观看相关的养老知识和技能培训视频。`);
+        }
+
+        // 上传视频
+        function uploadVideo() {
+            alert('打开视频上传功能\n\n支持上传MP4、AVI等格式的视频文件，上传后将进行审核。');
+        }
+
+        // 选择服务
+        function selectService(service) {
+            const services = {
+                '智慧生活': '提供智能家居设备使用指导、生活便民服务等',
+                '生活辅导': '日常生活技能培训、健康生活指导等',
+                '出行陪伴': '医院陪诊、购物陪伴、旅游陪伴等服务',
+                '医疗体检': '健康体检、慢病管理、用药指导等',
+                '上门服务': '家政清洁、维修服务、送餐服务等',
+                '心理疏导': '心理健康咨询、情感陪伴、心理治疗等',
+                '紧急求助': '24小时紧急救援、医疗急救、安全监护',
+                '生活用品': '日用品代购、药品配送、生活物资等',
+                '法律咨询': '法律问题咨询、遗嘱见证、权益保护等'
+            };
+            
+            alert(`${service}服务\n\n${services[service]}\n\n点击确定预约服务或了解更多详情。`);
+        }
+
+        // 志愿者管理
+        function manageVolunteer(action) {
+            const actions = {
+                '志愿者招募': '发布志愿者招募信息，吸引更多爱心人士加入我们的志愿服务队伍',
+                '志愿者培训': '组织专业培训课程，提升志愿者的服务能力和专业素养',
+                '志愿者认证': '建立志愿者认证体系，确保服务质量和专业水准',
+                '志愿者实习': '为新志愿者提供实习机会，在实践中提升服务技能',
+                '志愿者之星': '表彰优秀志愿者，展示榜样力量，激励更多人参与',
+                '志愿活动': '组织各类志愿服务活动，丰富老年人的精神文化生活',
+                '服务记录': '记录志愿服务时长和内容，建立完整的服务档案',
+                '志愿者社区': '搭建志愿者交流平台，分享经验、互相学习',
+                '表彰奖励': '建立激励机制，对优秀志愿者进行表彰和奖励'
+            };
+            
+            alert(`${action}\n\n${actions[action]}\n\n点击确定了解更多详情或参与相关活动。`);
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加一些交互效果
+            document.querySelectorAll('.grid-item').forEach(item => {
+                item.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+                
+                item.addEventListener('touchend', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
